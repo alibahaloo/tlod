@@ -1,0 +1,68 @@
+/* === Reset === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #2d0000;
+}
+
+/* === Landing container === */
+.landing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #2d0000;
+}
+
+/* === Hero image — mobile-first (fill width) === */
+.hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
+/* === Wide viewports: fill height instead === */
+@media (min-aspect-ratio: 768/1376) {
+  .hero-image {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+  }
+}
+
+/* === Visually hidden (screen readers only) === */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* === Print === */
+@media print {
+  .landing {
+    height: auto;
+    overflow: visible;
+  }
+  .hero-image {
+    max-width: 100%;
+    height: auto;
+  }
+}
