@@ -1,4 +1,30 @@
+/* ==========================================================================
+   Théâtre Centennial Theatre — landing page
+
+   The layout is a direct transcription of the source artwork, which is
+   1792 px wide. Every distance below is written in that artwork's own pixel
+   units and scaled by --u, so the composition keeps its proportions at any
+   size. --w is the width the artwork is drawn at; the hero, divider and
+   footer bands themselves always run the full width of the viewport.
+   ========================================================================== */
+
+/* Poppins (SIL OFL, see fonts/OFL.txt) is declared in the <head> of each
+   page so the download starts before this stylesheet is parsed. */
+
+:root {
+  /* Artwork drawing width. The artwork is 2.41x as tall as it is wide, so the
+     height cap fits the whole composition on screen without squashing it; the
+     bands themselves still bleed to the full width of the viewport. The 230px
+     floor keeps the tagline readable on very short viewports (a phone held
+     sideways), at the cost of scrolling there rather than shrinking to 10px. */
+  --w: min(100vw, 620px, max(41svh, 230px));
+  --u: calc(var(--w) / 1792);
+
+  --dark: #210303;
+}
+
 /* === Reset === */
+
 *,
 *::before,
 *::after {
@@ -9,60 +35,177 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  background: #2d0000;
+  background: var(--dark);
 }
 
-/* === Landing container === */
-.landing {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  background: #2d0000;
+body {
+  font-family: "Poppins", "Futura", "Century Gothic", system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* === Hero image — mobile-first (fill width) === */
-.hero-image {
+img {
   display: block;
-  width: 100%;
+}
+
+/* === Page shell === */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* === Hero — feather on the red field ===================================== */
+
+.hero {
+  position: relative;
+  z-index: 1;                       /* the lower dots overhang the divider */
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: calc(var(--u) * 180);
+  /* The red field is reproduced in CSS rather than shipped as a photograph, so
+     it stays smooth at any viewport shape instead of smearing the studio
+     lighting into bands. It is a separable fit of the artwork's own field: a
+     horizontal falloff multiplied by a vertical one (worst error 26/255). The
+     photograph is then laid back over it at the artwork's own width, faded out
+     at the sides and foot in its own alpha, to restore the lighting right
+     behind the feather. The guard layer under it lands the foot of the field on
+     exactly the dark the divider starts from, so the bands meet without a step. */
+  background-color: var(--dark);
+  background-image:
+    url("../img/field.webp"),
+    linear-gradient(rgb(33 3 3 / 0) 86%, var(--dark) 97%),
+    linear-gradient(
+      to right,
+      rgb(234 234 234) 0%, rgb(238 238 238) 6.25%, rgb(240 240 240) 12.5%,
+      rgb(246 246 246) 18.75%, rgb(251 251 251) 25%, rgb(254 254 254) 31.25%,
+      rgb(255 255 255) 37.5%, rgb(252 252 252) 43.75%, rgb(247 247 247) 50%,
+      rgb(235 235 235) 56.25%, rgb(221 221 221) 62.5%, rgb(206 206 206) 68.75%,
+      rgb(190 190 190) 75%, rgb(173 173 173) 81.25%, rgb(155 155 155) 87.5%,
+      rgb(144 144 144) 93.75%, rgb(132 132 132) 100%
+    ),
+    linear-gradient(
+      rgb(157 3 8) 0%, rgb(164 3 8) 6.25%, rgb(177 4 9) 12.5%,
+      rgb(188 6 11) 18.75%, rgb(193 7 11) 25%, rgb(188 7 10) 31.25%,
+      rgb(178 7 9) 37.5%, rgb(167 9 9) 43.75%, rgb(151 8 9) 50%,
+      rgb(132 8 8) 56.25%, rgb(173 7 7) 62.5%, rgb(178 7 7) 68.75%,
+      rgb(118 8 8) 75%, rgb(81 6 5) 81.25%, rgb(51 5 4) 87.5%,
+      rgb(36 4 3) 93.75%, rgb(37 3 3) 100%
+    );
+  background-size: var(--w) 100%, auto, auto, auto;
+  background-position: center top, 0 0, 0 0, 0 0;
+  background-repeat: no-repeat;
+  background-blend-mode: normal, normal, multiply, normal;
+}
+
+.dots {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--u) * 80);
+  position: relative;
+  z-index: 1;                       /* sit above the feather's faded margin */
+  flex: none;
+}
+
+.dots i {
+  width: calc(var(--u) * 20);
+  height: calc(var(--u) * 20);
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* The slice carries its own faded margin of red, so it starts above the last
+   dot and blends into the backdrop rather than meeting it at an edge. */
+.feather {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: calc(var(--u) * 1000);
+  height: calc(var(--u) * 1550);
+  margin-top: calc(var(--u) * -250);
+  object-fit: contain;
+  transform: translateX(calc(var(--u) * -24));   /* slice centre → page centre */
+}
+
+.tagline {
+  flex: none;
+  margin: calc(var(--u) * -10) 0 0;
+  /* Poppins sets ~23% wider than the face used in the artwork, so the size is
+     a compromise between matching its cap height and matching its line width. */
+  font-size: calc(var(--u) * 118);
+  line-height: calc(var(--u) * 152);
+  font-weight: 400;
+  text-align: center;
+  color: #fff;
+}
+
+.dots--bottom {
+  margin-top: calc(var(--u) * 79);
+  margin-bottom: calc(var(--u) * -60);
+}
+
+/* === Divider — gold flourish over the dark/white boundary ================ */
+
+.divider {
+  flex: none;
+  height: calc(var(--u) * 660);
+  /* The flourish sits at the left of the frame as it does in the artwork; right
+     of it the artwork's own flat profile is tiled out to the edge. */
+  background-image: url("../img/flourish.webp"), url("../img/divider-edge.webp");
+  background-position: left top;
+  background-size: auto 100%;
+  background-repeat: no-repeat, repeat-x;
+}
+
+/* === Footer — date and theatre mark ====================================== */
+
+.footer {
+  flex: none;
+  background: #fff;
+  text-align: center;
+  padding-top: calc(var(--u) * 76);
+  padding-bottom: calc(var(--u) * 365);
+}
+
+.date {
+  margin: 0;
+  font-size: calc(var(--u) * 140);
+  line-height: 1;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.date sup {
+  font-size: 0.5em;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.62em;
+}
+
+.logo {
+  width: calc(var(--u) * 395);
   height: auto;
-  max-height: 100%;
-}
-
-/* === Wide viewports: fill height instead === */
-@media (min-aspect-ratio: 768/1376) {
-  .hero-image {
-    width: auto;
-    height: 100%;
-    max-width: 100%;
-  }
-}
-
-/* === Visually hidden (screen readers only) === */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  margin: calc(var(--u) * 122) auto 0;
 }
 
 /* === Print === */
+
 @media print {
-  .landing {
-    height: auto;
-    overflow: visible;
+  .page {
+    min-height: 0;
   }
-  .hero-image {
-    max-width: 100%;
-    height: auto;
+
+  .hero {
+    background: var(--dark);
+  }
+
+  .footer {
+    padding-bottom: calc(var(--u) * 180);
   }
 }

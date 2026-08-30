@@ -2,24 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Coming November 1, 2026</title>
-  <style>body{background:#2d0000}</style>
+  <meta name="description" content="A thousand untold stories lie hidden in this land. Nov 1st 2026 — Théâtre Centennial Theatre.">
+  <meta name="theme-color" content="#210303">
+  <!-- Inline so the field colour is up before first paint and the faces start
+       downloading with the head rather than after the stylesheet is parsed. -->
+  <style>
+    html { background: #210303 }
+    @font-face {
+      font-family: "Poppins";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./fonts/poppins-400-latin.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Poppins";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("./fonts/poppins-700-latin.woff2") format("woff2");
+    }
+  </style>
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <main class="landing">
-    <h1 class="visually-hidden">Coming November 1, 2026</h1>
-    <picture>
-      <source srcset="./img/feather_w_date.webp" type="image/webp">
-      <img
-        src="./img/feather_w_date.jpg"
-        alt="November 1st, 2026"
-        width="768"
-        height="1376"
-        class="hero-image"
-      >
-    </picture>
+  <main class="page">
+
+    <section class="hero">
+      <span class="dots dots--top" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+
+      <img class="feather" src="./img/feather.webp" alt=""
+           width="1000" height="1550" fetchpriority="high">
+
+      <h1 class="tagline">A thousand<br>untold stories<br>lie hidden in this land</h1>
+
+      <span class="dots dots--bottom" aria-hidden="true"><i></i><i></i><i></i></span>
+    </section>
+
+    <div class="divider"></div>
+
+    <footer class="footer">
+      <p class="date"><time datetime="2026-11-01">Nov 1<sup>st</sup> 2026</time></p>
+      <img class="logo" src="./img/logo.webp" alt="Théâtre Centennial Theatre"
+           width="395" height="468">
+    </footer>
+
   </main>
 </body>
 </html>
